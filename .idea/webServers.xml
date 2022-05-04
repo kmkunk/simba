@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="6805fe1a-a5da-44f2-8beb-bc5125fdf6f6" name="simba" url="http://13.125.24.163">
+        <fileTransfer rootFolder="/var/www/simba" accessType="SFTP" host="13.125.24.163" port="22" sshConfigId="5b1a032f-16dd-4239-8290-71a5611755a8" sshConfig="ubuntu@13.125.24.163:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
