@@ -7,13 +7,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class GetPostRes {
     private int postId;
-    private int userId;
-    private int postCategoryId;
-    private int village1Id;
     private String title;
-    private String content;
     private int price;
+    private String content;
     private String createdAt;
-    private String updatedAt;
-    private String status;
+    private String nickname;
+    private String vname;
+    private String ename;
+    private String URL;
 }
