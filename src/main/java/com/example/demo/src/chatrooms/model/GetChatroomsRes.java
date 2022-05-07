@@ -1,17 +1,15 @@
-package com.example.demo.src.post.model;
+package com.example.demo.src.chatrooms.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class GetPostsRes {
+public class GetChatroomsRes {
+    private int chatroomId;
     private int postId;
-    private String title;
-    private int price;
     private String createdAt;
+    private String nickname;
     private String name;
-    private int chatroomCount;
-    private int interestPostCount;
     private String URL;
 }

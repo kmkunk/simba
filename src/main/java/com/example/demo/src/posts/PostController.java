@@ -1,9 +1,9 @@
-package com.example.demo.src.post;
+package com.example.demo.src.posts;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.post.model.GetPostRes;
-import com.example.demo.src.post.model.GetPostsRes;
+import com.example.demo.src.posts.model.GetPostRes;
+import com.example.demo.src.posts.model.GetPostsRes;
 
 import java.util.List;
 

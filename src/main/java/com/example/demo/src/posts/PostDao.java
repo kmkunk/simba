@@ -1,7 +1,7 @@
-package com.example.demo.src.post;
+package com.example.demo.src.posts;
 
-import com.example.demo.src.post.model.GetPostRes;
-import com.example.demo.src.post.model.GetPostsRes;
+import com.example.demo.src.posts.model.GetPostRes;
+import com.example.demo.src.posts.model.GetPostsRes;
 
 import javax.sql.DataSource;
 import java.util.List;
