@@ -21,7 +21,7 @@ public class PostController {
     private final PostProvider postProvider;
 
     /**
-     * 특정 지역에 대한 중고거래 게시글 리스트
+     * 특정 지역에 대한 중고거래 게시글 리스트 API
      * [GET] /posts/:village
      * @return BaseResponse<List<GetPostsRes>>
      */
