@@ -6,6 +6,8 @@ import com.example.demo.src.posts.model.GetPostsRes;
 import javax.sql.DataSource;
 import java.util.List;
 
+import com.example.demo.src.posts.model.PostPostReq;
+import com.example.demo.src.posts.model.PostPostRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -112,5 +114,22 @@ public class PostDao {
                 rs.getString("cname"),
                 rs.getString("URL")),
                 new Object[]{getPostByVillage, getPostByUserId});
+    }
+
+    public PostPostRes postPost(String village, PostPostReq postPostReq) {
+        String postPostQuery =
+                "insert into post" +
+                " (userId, postCategoryId, village1Id, title, content, price, createdAt, updatedAt, status)" +
+                " values" +
+                " (?, ?, (select village1Id from village1 where name = ?), ?, ?, ?, now(), null, 'posting')";
+        String postPostByVillage = village;
+        this.jdbcTemplate.update(postPostQuery,
+                new Object[]{postPostReq.getUserId(), postPostReq.getPostCategoryId(), postPostByVillage,
+                        postPostReq.getTitle(), postPostReq.getContent(), postPostReq.getPrice()});
+
+        String resultQuery =
+                "select last_insert_id() as 'postId'";
+        return this.jdbcTemplate.queryForObject(resultQuery, (rs, rowNum) -> new PostPostRes(
+                rs.getInt("postId")));
     }
 }

@@ -7,18 +7,18 @@ import com.example.demo.src.posts.model.GetPostsRes;
 
 import java.util.List;
 
+import com.example.demo.src.posts.model.PostPostReq;
+import com.example.demo.src.posts.model.PostPostRes;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/posts")
 public class PostController {
     private final PostProvider postProvider;
+    private final PostService postService;
 
     /**
      * 특정 지역에 대한 중고거래 게시글 리스트 API
@@ -45,6 +45,22 @@ public class PostController {
         try {
             GetPostRes getPostRes = postProvider.getPost(village, postId);
             return new BaseResponse<>(getPostRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 중고거래 게시글 생성 API
+     * [POST] /posts/:village
+     * @return BaseResponse<PostPostRes>
+     */
+    @PostMapping("/{village}")
+    public BaseResponse<PostPostRes> postPost(@PathVariable("village") String village,
+                                              @RequestBody PostPostReq postPostReq) {
+        try {
+            PostPostRes postPostRes = postService.postPost(village, postPostReq);
+            return new BaseResponse<>(postPostRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
