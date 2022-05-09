@@ -1,13 +1,10 @@
 package com.example.demo.src.villagelifeposts;
 
-import com.example.demo.src.villagelifeposts.model.GetVillageLifePostRes;
-import com.example.demo.src.villagelifeposts.model.GetVillageLifePostsRes;
+import com.example.demo.src.villagelifeposts.model.*;
 
 import javax.sql.DataSource;
 import java.util.List;
 
-import com.example.demo.src.villagelifeposts.model.PostVillageLifePostReq;
-import com.example.demo.src.villagelifeposts.model.PostVillageLifePostRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -154,5 +151,22 @@ public class VillageLifePostDao {
                 "select last_insert_id() as 'villageLifePostId'";
         return this.jdbcTemplate.queryForObject(resultQuery, (rs, rowNum) -> new PostVillageLifePostRes(
                 rs.getInt("villageLifePostId")));
+    }
+
+    public Integer patchVillageLifePost(String village, int postId, PatchVillageLifePostReq patchVillageLifePostReq) {
+        String patchVillageLifePostQuery =
+                "update villagelifepost" +
+                " set villageLifePostCategoryId = ?, title = ?, content = ?" +
+                " where village1Id =" +
+                " (select village1Id from village1 where name = ?)" +
+                " and villageLifePostId = ?";
+        String patchVillageLifePostByVillage = village;
+        int patchVillageLifePostByPostId = postId;
+        this.jdbcTemplate.update(patchVillageLifePostQuery,
+                new Object[]{patchVillageLifePostReq.getVillageLifePostCategoryId(),
+                        patchVillageLifePostReq.getTitle(), patchVillageLifePostReq.getContent(),
+                        patchVillageLifePostByVillage, patchVillageLifePostByPostId});
+        int patchVillageLifePostRes = postId;
+        return patchVillageLifePostRes;
     }
 }

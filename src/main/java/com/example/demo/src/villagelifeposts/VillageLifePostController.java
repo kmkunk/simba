@@ -2,10 +2,7 @@ package com.example.demo.src.villagelifeposts;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.villagelifeposts.model.GetVillageLifePostRes;
-import com.example.demo.src.villagelifeposts.model.GetVillageLifePostsRes;
-import com.example.demo.src.villagelifeposts.model.PostVillageLifePostReq;
-import com.example.demo.src.villagelifeposts.model.PostVillageLifePostRes;
+import com.example.demo.src.villagelifeposts.model.*;
 
 import java.util.List;
 
@@ -63,6 +60,24 @@ public class VillageLifePostController {
             PostVillageLifePostRes postVillageLifePostRes =
                     villageLifePostService.postVillageLifePost(village, postVillageLifePostReq);
             return new BaseResponse<>(postVillageLifePostRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 동네 생활 게시글 수정 API
+     * [PATCH] /villagelifeposts/:village/:postId
+     * @return BaseResponse<Integer>
+     */
+    @PatchMapping("/{village}/{postId}")
+    public BaseResponse<Integer> patchVillageLifePost(@PathVariable("village") String village,
+                                                      @PathVariable("postId") int postId,
+                                                      @RequestBody PatchVillageLifePostReq patchVillageLifePostReq) {
+        try {
+            Integer patchVillageLifePostRes =
+                    villageLifePostService.patchVillageLifePost(village, postId, patchVillageLifePostReq);
+            return new BaseResponse<>(patchVillageLifePostRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }

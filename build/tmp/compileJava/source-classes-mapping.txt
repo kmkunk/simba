@@ -82,3 +82,5 @@ com/example/demo/src/villagelifeposts/VillageLifePostDao.java
  com.example.demo.src.villagelifeposts.VillageLifePostDao
 com/example/demo/src/villagelifeposts/VillageLifePostProvider.java
  com.example.demo.src.villagelifeposts.VillageLifePostProvider
+com/example/demo/src/villagelifeposts/model/PatchVillageLifePostReq.java
+ com.example.demo.src.villagelifeposts.model.PatchVillageLifePostReq
