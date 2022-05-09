@@ -2,13 +2,10 @@ package com.example.demo.src.posts;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.posts.model.GetPostRes;
-import com.example.demo.src.posts.model.GetPostsRes;
+import com.example.demo.src.posts.model.*;
 
 import java.util.List;
 
-import com.example.demo.src.posts.model.PostPostReq;
-import com.example.demo.src.posts.model.PostPostRes;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;
@@ -61,6 +58,23 @@ public class PostController {
         try {
             PostPostRes postPostRes = postService.postPost(village, postPostReq);
             return new BaseResponse<>(postPostRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 중고거래 게시글 수정 API
+     * [PATCH] /posts/:village/:postId
+     * @return BaseResponse<Integer>
+     */
+    @PatchMapping("/{village}/{postId}")
+    public BaseResponse<Integer> patchPost(@PathVariable("village") String village,
+                                                @PathVariable("postId") int postId,
+                                                @RequestBody PatchPostReq patchPostReq) {
+        try {
+            Integer patchPostRes = postService.patchPost(village, postId, patchPostReq);
+            return new BaseResponse<>(patchPostRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }

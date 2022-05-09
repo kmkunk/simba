@@ -6,6 +6,8 @@ import com.example.demo.src.villagelifeposts.model.GetVillageLifePostsRes;
 import javax.sql.DataSource;
 import java.util.List;
 
+import com.example.demo.src.villagelifeposts.model.PostVillageLifePostReq;
+import com.example.demo.src.villagelifeposts.model.PostVillageLifePostRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -134,5 +136,23 @@ public class VillageLifePostDao {
                 rs.getInt("villageLifePostLikeCount"),
                 rs.getInt("commentCount")),
                 new Object[]{getVillageLifePostByVillage, getVillageLifePostByPostId});
+    }
+
+    public PostVillageLifePostRes postVillageLifePost(String village, PostVillageLifePostReq postVillageLifePostReq) {
+        String postVillageLifePostQuery =
+                "insert into villagelifepost" +
+                " (userId, villageLifePostCategoryId, village1Id," +
+                " title, content, createdAt, updatedAt, status)" +
+                " values" +
+                " (?, ?, (select village1Id from village1 where name = ?), ?, ?, now(), null, 'posting')";
+        String postVillageLifePostByVillage = village;
+        this.jdbcTemplate.update(postVillageLifePostQuery,
+                new Object[]{postVillageLifePostReq.getUserId(), postVillageLifePostReq.getVillageLifePostCategoryId(),
+                        postVillageLifePostByVillage, postVillageLifePostReq.getTitle(),
+                        postVillageLifePostReq.getContent()});
+        String resultQuery =
+                "select last_insert_id() as 'villageLifePostId'";
+        return this.jdbcTemplate.queryForObject(resultQuery, (rs, rowNum) -> new PostVillageLifePostRes(
+                rs.getInt("villageLifePostId")));
     }
 }

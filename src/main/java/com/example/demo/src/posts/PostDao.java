@@ -1,13 +1,10 @@
 package com.example.demo.src.posts;
 
-import com.example.demo.src.posts.model.GetPostRes;
-import com.example.demo.src.posts.model.GetPostsRes;
+import com.example.demo.src.posts.model.*;
 
 import javax.sql.DataSource;
 import java.util.List;
 
-import com.example.demo.src.posts.model.PostPostReq;
-import com.example.demo.src.posts.model.PostPostRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -126,10 +123,25 @@ public class PostDao {
         this.jdbcTemplate.update(postPostQuery,
                 new Object[]{postPostReq.getUserId(), postPostReq.getPostCategoryId(), postPostByVillage,
                         postPostReq.getTitle(), postPostReq.getContent(), postPostReq.getPrice()});
-
         String resultQuery =
                 "select last_insert_id() as 'postId'";
         return this.jdbcTemplate.queryForObject(resultQuery, (rs, rowNum) -> new PostPostRes(
                 rs.getInt("postId")));
+    }
+
+    public Integer patchPost(String village, int postId, PatchPostReq patchPostReq) {
+        String patchPostQuery =
+                "update post" +
+                " set postCategoryId = ?, title = ?, content = ?, price = ?" +
+                " where village1Id =" +
+                " (select village1Id from village1 where name = ?)" +
+                " and postid = ?";
+        String patchPostByVillage = village;
+        int patchPostByPostId = postId;
+        this.jdbcTemplate.update(patchPostQuery,
+                new Object[]{patchPostReq.getPostCategoryId(), patchPostReq.getTitle(), patchPostReq.getContent(),
+                        patchPostReq.getPrice(), patchPostByVillage, patchPostByPostId});
+        int patchPostRes = postId;
+        return patchPostRes;
     }
 }
