@@ -49,7 +49,6 @@ public class PostDao {
                 " on a.postId = e.postId" +
 
                 " where b.name = ?";
-        String getPostsByVillage = village;
         return this.jdbcTemplate.query(getPostsQuery, (rs, rowNum) -> new GetPostsRes(
                 rs.getInt("postId"),
                 rs.getString("title"),
@@ -59,12 +58,12 @@ public class PostDao {
                 rs.getInt("chatroomCount"),
                 rs.getInt("interestPostCount"),
                 rs.getString("URL")),
-                new Object[]{getPostsByVillage});
+                new Object[]{village});
     }
 
-    public GetPostRes getPost(String village, int userId) {
+    public GetPostInfoRes getPostInfo(String village, int postId) {
         String getPostQuery =
-                "select a.postId, a.title, a.price, a.content, a.createdAt, b.nickname, d.vname, e.cname, f.URL" +
+                "select a.postId, a.title, a.price, a.content, a.createdAt, b.nickname, d.vname, e.cname" +
                 " from post a" +
 
                 " join (" +
@@ -91,16 +90,8 @@ public class PostDao {
                 " ) as e" +
                 " on a.postCategoryId = e.postCategoryId" +
 
-                " join (" +
-                " select postImageId, postId, URL" +
-                " from postimage" +
-                " ) as f" +
-                " on a.postId = f.postId" +
-
                 " where d.vname = ? and a.postId = ?";
-        String getPostByVillage = village;
-        int getPostByUserId = userId;
-        return this.jdbcTemplate.queryForObject(getPostQuery, (rs, rowNum) -> new GetPostRes(
+        return this.jdbcTemplate.queryForObject(getPostQuery, (rs, rowNum) -> new GetPostInfoRes(
                 rs.getInt("postId"),
                 rs.getString("title"),
                 rs.getInt("price"),
@@ -108,9 +99,20 @@ public class PostDao {
                 rs.getString("createdAt"),
                 rs.getString("nickname"),
                 rs.getString("vname"),
-                rs.getString("cname"),
-                rs.getString("URL")),
-                new Object[]{getPostByVillage, getPostByUserId});
+                rs.getString("cname")),
+                new Object[]{village, postId});
+    }
+
+    public List<GetPostURLsRes> getPostURLs(int postId) {
+        String getPostURLsQuery =
+                "select a.postImageId, a.URL, a.representative" +
+                " from postimage a" +
+                " where a.postId = ?";
+        return this.jdbcTemplate.query(getPostURLsQuery, (rs, rowNum) -> new GetPostURLsRes(
+                rs.getInt("postImageId"),
+                rs.getString("URL"),
+                rs.getBoolean("representative")),
+                new Object[]{postId});
     }
 
     public PostPostRes postPost(String village, PostPostReq postPostReq) {

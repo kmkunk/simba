@@ -8,6 +8,8 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,6 +24,8 @@ public class VillageLifePostController {
      * [GET] /villagelifeposts/:village
      * @return BaseResponse<List<GetVillageLifePostsRes>>
      */
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
     @GetMapping("/{village}")
     public BaseResponse<List<GetVillageLifePostsRes>> getVillageLifePosts(@PathVariable("village") String village) {
         try {
@@ -38,11 +42,11 @@ public class VillageLifePostController {
      * @return BaseResponse<GetVillageLifePostRes>
      */
     @GetMapping("/{village}/{postId}")
-    public BaseResponse<GetVillageLifePostRes> getVillageLifePost(@PathVariable("village") String village,
+    public BaseResponse<GetPostAndComments> getVillageLifePost(@PathVariable("village") String village,
                                                                   @PathVariable("postId") int postId) {
         try {
-            GetVillageLifePostRes getVillageLifePostRes = villageLifePostProvider.getVillageLifePost(village, postId);
-            return new BaseResponse<>(getVillageLifePostRes);
+            GetPostAndComments villageLifePost = villageLifePostProvider.getVillageLifePost(village, postId);
+            return new BaseResponse<>(villageLifePost);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }

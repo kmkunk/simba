@@ -2,6 +2,7 @@ package com.example.demo.src.posts;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.posts.model.*;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class PostController {
     @GetMapping("/{village}/{postId}")
     public BaseResponse<GetPostRes> getPost(@PathVariable("village") String village, @PathVariable("postId") int postId) {
         try {
+            if(postId<=0) { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
             GetPostRes getPostRes = postProvider.getPost(village, postId);
             return new BaseResponse<>(getPostRes);
         } catch (BaseException exception) {
@@ -55,6 +57,15 @@ public class PostController {
     @PostMapping("/{village}")
     public BaseResponse<PostPostRes> postPost(@PathVariable("village") String village,
                                               @RequestBody PostPostReq postPostReq) {
+        int userId = postPostReq.getUserId();
+        int postCategoryId = postPostReq.getPostCategoryId();
+        String title = postPostReq.getTitle();
+        String content = postPostReq.getContent();
+        int price = postPostReq.getPrice();
+
+        if(userId<=0 || postCategoryId<=0 || title==null || content==null || price<0)
+        { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
+
         try {
             PostPostRes postPostRes = postService.postPost(village, postPostReq);
             return new BaseResponse<>(postPostRes);

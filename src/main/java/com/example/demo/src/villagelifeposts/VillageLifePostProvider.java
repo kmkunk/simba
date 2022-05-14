@@ -2,6 +2,8 @@ package com.example.demo.src.villagelifeposts;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponseStatus;
+import com.example.demo.src.villagelifeposts.model.GetCommentTemp;
+import com.example.demo.src.villagelifeposts.model.GetPostAndComments;
 import com.example.demo.src.villagelifeposts.model.GetVillageLifePostRes;
 import com.example.demo.src.villagelifeposts.model.GetVillageLifePostsRes;
 
@@ -25,10 +27,12 @@ public class VillageLifePostProvider {
         }
     }
 
-    public GetVillageLifePostRes getVillageLifePost(String village, int postId) throws BaseException {
+    public GetPostAndComments getVillageLifePost(String village, int postId) throws BaseException {
         try {
             GetVillageLifePostRes getVillageLifePostRes = villageLifePostDao.getVillageLifePost(village, postId);
-            return getVillageLifePostRes;
+            List<GetCommentTemp> getCommentTemps = villageLifePostDao.getVillageLifePostComments(postId);
+            GetPostAndComments getPostAndComments = new GetPostAndComments(getVillageLifePostRes, getCommentTemps);
+            return getPostAndComments;
         } catch (Exception exception) {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }

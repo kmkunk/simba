@@ -169,4 +169,26 @@ public class VillageLifePostDao {
         int patchVillageLifePostRes = postId;
         return patchVillageLifePostRes;
     }
+
+    public List<GetCommentTemp> getVillageLifePostComments(int villageLifePostId) {
+        String getVillageLifePostComments =
+                "select a.commentId, a.villageLifePostId, b.nickname, a.content, a.createdAt" +
+                " from comment a" +
+                "" +
+                " join (" +
+                " select userId, nickname" +
+                " from user" +
+                " ) as b" +
+                " on a.userId = b.userId" +
+                "" +
+                " where a.villageLifePostId = ?";
+        int getVillageLifePostCommentsById = villageLifePostId;
+        return this.jdbcTemplate.query(getVillageLifePostComments, (rs, rowNum) -> new GetCommentTemp(
+                rs.getInt("commentId"),
+                rs.getInt("villageLifePostId"),
+                rs.getString("nickname"),
+                rs.getString("content"),
+                rs.getString("createdAt")),
+                new Object[]{getVillageLifePostCommentsById});
+    }
 }

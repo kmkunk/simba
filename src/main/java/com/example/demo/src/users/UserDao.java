@@ -198,4 +198,30 @@ public class UserDao {
                 rs.getString("name")),
                 new Object[]{getBadMannersByUserId});
     }
+
+    public PostUserRes postUser(PostUserReq postUserReq) {
+        String postUserQuery =
+                "insert into user" +
+                " (nickname, phone, email, URL)" +
+                " values" +
+                " (?, ?, ?, ?)";
+        this.jdbcTemplate.update(postUserQuery,
+                new Object[]{postUserReq.getNickname(), postUserReq.getPhone(),
+                        postUserReq.getEmail(), postUserReq.getURL()});
+        String resultQuery =
+                "select last_insert_id() as 'userId'";
+        return this.jdbcTemplate.queryForObject(resultQuery, (rs, rowNum) -> new PostUserRes(
+                rs.getInt("userId")));
+    }
+
+    public GetUserPhoneRes getUserPhone(int userId) {
+        String getUserPhoneQuery =
+                "select userId, phone" +
+                " from user" +
+                " where userId = ?";
+        return this.jdbcTemplate.queryForObject(getUserPhoneQuery, (rs, rowNum) -> new GetUserPhoneRes(
+                rs.getInt("userId"),
+                rs.getString("phone")),
+                new Object[]{userId});
+    }
 }
