@@ -9,5 +9,5 @@ import lombok.Data;
 @AllArgsConstructor
 public class GetPostRes {
     private GetPostInfoRes getPostInfoRes;
-    private List<GetPostURLsRes> getPostURLsResList;
+    private List<GetPostUrlsRes> getPostUrlsResList;
 }

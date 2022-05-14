@@ -4,7 +4,7 @@ import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.posts.model.GetPostInfoRes;
 import com.example.demo.src.posts.model.GetPostRes;
-import com.example.demo.src.posts.model.GetPostURLsRes;
+import com.example.demo.src.posts.model.GetPostUrlsRes;
 import com.example.demo.src.posts.model.GetPostsRes;
 
 import java.util.List;
@@ -34,8 +34,8 @@ public class PostProvider {
     public GetPostRes getPost(String village, int postId) throws BaseException {
         try {
             GetPostInfoRes getPostInfoRes = postDao.getPostInfo(village, postId);
-            List<GetPostURLsRes> getPostURLsResList = postDao.getPostURLs(postId);
-            GetPostRes getPostRes = new GetPostRes(getPostInfoRes, getPostURLsResList);
+            List<GetPostUrlsRes> getPostUrlsResList = postDao.getPostUrls(postId);
+            GetPostRes getPostRes = new GetPostRes(getPostInfoRes, getPostUrlsResList);
             return getPostRes;
         } catch (Exception exception) {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);

@@ -7,6 +7,7 @@ import com.example.demo.src.posts.model.*;
 
 import java.util.List;
 
+import com.example.demo.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class PostController {
     private final PostProvider postProvider;
     private final PostService postService;
+    private final JwtService jwtService;
 
     /**
      * 특정 지역에 대한 중고거래 게시글 리스트 API
@@ -66,7 +68,11 @@ public class PostController {
         if(userId<=0 || postCategoryId<=0 || title==null || content==null || price<0)
         { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
 
+
         try {
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
+
             PostPostRes postPostRes = postService.postPost(village, postPostReq);
             return new BaseResponse<>(postPostRes);
         } catch (BaseException exception) {
@@ -83,7 +89,12 @@ public class PostController {
     public BaseResponse<Integer> patchPost(@PathVariable("village") String village,
                                                 @PathVariable("postId") int postId,
                                                 @RequestBody PatchPostReq patchPostReq) {
+        int userId = patchPostReq.getUserId();
+
         try {
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
+
             Integer patchPostRes = postService.patchPost(village, postId, patchPostReq);
             return new BaseResponse<>(patchPostRes);
         } catch (BaseException exception) {

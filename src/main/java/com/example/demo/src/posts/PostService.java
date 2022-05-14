@@ -9,12 +9,15 @@ import com.example.demo.src.posts.model.PostPostRes;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
     private final PostDao postDao;
 
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
     public PostPostRes postPost(String village, PostPostReq postPostReq) throws BaseException {
         try {
             PostPostRes postPostRes = postDao.postPost(village, postPostReq);
@@ -24,6 +27,7 @@ public class PostService {
         }
     }
 
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
     public Integer patchPost(String village, int postId, PatchPostReq patchPostReq) throws BaseException {
         try {
             Integer patchPostRes = postDao.patchPost(village, postId, patchPostReq);

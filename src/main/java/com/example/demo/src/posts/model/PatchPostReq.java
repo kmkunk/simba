@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class PatchPostReq {
+    private int userId;
     private int postCategoryId;
     private String title;
     private String content;

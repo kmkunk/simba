@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class GetCommentTemp {
+public class GetCommentsRes {
     private int commentId;
     private int villageLifePostId;
     private String nickname;

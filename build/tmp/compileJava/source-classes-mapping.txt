@@ -1,17 +1,17 @@
-com/example/demo/src/villagelifeposts/VillageLifePostProvider.java
- com.example.demo.src.villagelifeposts.VillageLifePostProvider
+com/example/demo/src/chatrooms/ChatroomController.java
+ com.example.demo.src.chatrooms.ChatroomController
 com/example/demo/utils/SHA256.java
  com.example.demo.utils.SHA256
 com/example/demo/config/Constant.java
  com.example.demo.config.Constant
 com/example/demo/src/users/model/GetMannersRes.java
  com.example.demo.src.users.model.GetMannersRes
-com/example/demo/src/posts/PostProvider.java
- com.example.demo.src.posts.PostProvider
-com/example/demo/src/posts/PostService.java
- com.example.demo.src.posts.PostService
-com/example/demo/src/villagelifeposts/model/GetVillageLifePostRes.java
- com.example.demo.src.villagelifeposts.model.GetVillageLifePostRes
+com/example/demo/src/posts/model/GetPostInfoRes.java
+ com.example.demo.src.posts.model.GetPostInfoRes
+com/example/demo/src/users/model/PostUserRes.java
+ com.example.demo.src.users.model.PostUserRes
+com/example/demo/src/users/model/PostUserReq.java
+ com.example.demo.src.users.model.PostUserReq
 com/example/demo/utils/ValidationRegex.java
  com.example.demo.utils.ValidationRegex
 com/example/demo/src/users/model/PostLoginReq.java
@@ -30,14 +30,14 @@ com/example/demo/src/posts/model/GetPostsRes.java
  com.example.demo.src.posts.model.GetPostsRes
 com/example/demo/src/chatrooms/ChatroomService.java
  com.example.demo.src.chatrooms.ChatroomService
-com/example/demo/src/villagelifeposts/VillageLifePostDao.java
- com.example.demo.src.villagelifeposts.VillageLifePostDao
+com/example/demo/src/users/UserDao.java
+ com.example.demo.src.users.UserDao
 com/example/demo/src/villagelifeposts/model/PostVillageLifePostReq.java
  com.example.demo.src.villagelifeposts.model.PostVillageLifePostReq
 com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
-com/example/demo/src/villagelifeposts/VillageLifePostController.java
- com.example.demo.src.villagelifeposts.VillageLifePostController
+com/example/demo/src/chatrooms/ChatroomProvider.java
+ com.example.demo.src.chatrooms.ChatroomProvider
 com/example/demo/src/WebSecurityConfig.java
  com.example.demo.src.WebSecurityConfig
 com/example/demo/src/users/model/GetBadMannersRes.java
@@ -46,8 +46,8 @@ com/example/demo/src/posts/model/PostPostRes.java
  com.example.demo.src.posts.model.PostPostRes
 com/example/demo/config/secret/Secret.java
  com.example.demo.config.secret.Secret
-com/example/demo/src/villagelifeposts/VillageLifePostService.java
- com.example.demo.src.villagelifeposts.VillageLifePostService
+com/example/demo/src/users/model/GetUserPhoneRes.java
+ com.example.demo.src.users.model.GetUserPhoneRes
 com/example/demo/src/users/model/GetEstimationsRes.java
  com.example.demo.src.users.model.GetEstimationsRes
 com/example/demo/config/BaseResponse.java
@@ -56,8 +56,8 @@ com/example/demo/src/users/model/GetSalesRes.java
  com.example.demo.src.users.model.GetSalesRes
 com/example/demo/src/users/UserController.java
  com.example.demo.src.users.UserController
-com/example/demo/src/posts/model/PatchPostReq.java
- com.example.demo.src.posts.model.PatchPostReq
+com/example/demo/src/villagelifeposts/VillageLifePostService.java
+ com.example.demo.src.villagelifeposts.VillageLifePostService
 com/example/demo/src/users/model/GetUserRes.java
  com.example.demo.src.users.model.GetUserRes
 com/example/demo/utils/JwtService.java
@@ -68,39 +68,41 @@ com/example/demo/src/users/UserService.java
  com.example.demo.src.users.UserService
 com/example/demo/src/chatrooms/model/GetChatroomsRes.java
  com.example.demo.src.chatrooms.model.GetChatroomsRes
-com/example/demo/src/posts/model/GetPostRes.java
- com.example.demo.src.posts.model.GetPostRes
+com/example/demo/src/users/model/PostLoginRes.java
+ com.example.demo.src.users.model.PostLoginRes
 com/example/demo/src/villagelifeposts/model/PostVillageLifePostRes.java
  com.example.demo.src.villagelifeposts.model.PostVillageLifePostRes
 com/example/demo/config/BaseException.java
  com.example.demo.config.BaseException
-com/example/demo/src/villagelifeposts/model/GetPostAndComments.java
- com.example.demo.src.villagelifeposts.model.GetPostAndComments
-com/example/demo/src/posts/model/PostPostReq.java
- com.example.demo.src.posts.model.PostPostReq
-com/example/demo/src/villagelifeposts/model/GetCommentTemp.java
- com.example.demo.src.villagelifeposts.model.GetCommentTemp
-com/example/demo/src/users/UserDao.java
- com.example.demo.src.users.UserDao
-com/example/demo/src/posts/model/GetPostURLsRes.java
- com.example.demo.src.posts.model.GetPostURLsRes
-com/example/demo/src/posts/model/GetPostInfoRes.java
- com.example.demo.src.posts.model.GetPostInfoRes
-com/example/demo/src/users/model/PostUserRes.java
- com.example.demo.src.users.model.PostUserRes
-com/example/demo/src/users/model/PostUserReq.java
- com.example.demo.src.users.model.PostUserReq
-com/example/demo/src/users/model/PostLoginRes.java
- com.example.demo.src.users.model.PostLoginRes
-com/example/demo/src/posts/PostController.java
- com.example.demo.src.posts.PostController
-com/example/demo/src/users/model/GetUserPhoneRes.java
- com.example.demo.src.users.model.GetUserPhoneRes
-com/example/demo/src/posts/PostDao.java
- com.example.demo.src.posts.PostDao
 com/example/demo/src/users/UserProvider.java
  com.example.demo.src.users.UserProvider
-com/example/demo/src/chatrooms/ChatroomController.java
- com.example.demo.src.chatrooms.ChatroomController
-com/example/demo/src/chatrooms/ChatroomProvider.java
- com.example.demo.src.chatrooms.ChatroomProvider
+com/example/demo/src/posts/model/PostPostReq.java
+ com.example.demo.src.posts.model.PostPostReq
+com/example/demo/src/posts/model/GetPostRes.java
+ com.example.demo.src.posts.model.GetPostRes
+com/example/demo/src/villagelifeposts/model/GetCommentsRes.java
+ com.example.demo.src.villagelifeposts.model.GetCommentsRes
+com/example/demo/src/villagelifeposts/model/GetVillageLifePostInfoRes.java
+ com.example.demo.src.villagelifeposts.model.GetVillageLifePostInfoRes
+com/example/demo/src/villagelifeposts/VillageLifePostProvider.java
+ com.example.demo.src.villagelifeposts.VillageLifePostProvider
+com/example/demo/src/villagelifeposts/VillageLifePostController.java
+ com.example.demo.src.villagelifeposts.VillageLifePostController
+com/example/demo/src/villagelifeposts/model/GetVillageLifePostRes.java
+ com.example.demo.src.villagelifeposts.model.GetVillageLifePostRes
+com/example/demo/src/posts/model/GetPostUrlsRes.java
+ com.example.demo.src.posts.model.GetPostUrlsRes
+com/example/demo/src/villagelifeposts/VillageLifePostDao.java
+ com.example.demo.src.villagelifeposts.VillageLifePostDao
+com/example/demo/src/villagelifeposts/model/GetVillageLifePostUrlsRes.java
+ com.example.demo.src.villagelifeposts.model.GetVillageLifePostUrlsRes
+com/example/demo/src/posts/PostController.java
+ com.example.demo.src.posts.PostController
+com/example/demo/src/posts/model/PatchPostReq.java
+ com.example.demo.src.posts.model.PatchPostReq
+com/example/demo/src/posts/PostService.java
+ com.example.demo.src.posts.PostService
+com/example/demo/src/posts/PostProvider.java
+ com.example.demo.src.posts.PostProvider
+com/example/demo/src/posts/PostDao.java
+ com.example.demo.src.posts.PostDao

@@ -103,12 +103,12 @@ public class PostDao {
                 new Object[]{village, postId});
     }
 
-    public List<GetPostURLsRes> getPostURLs(int postId) {
-        String getPostURLsQuery =
+    public List<GetPostUrlsRes> getPostUrls(int postId) {
+        String getPostUrlsQuery =
                 "select a.postImageId, a.URL, a.representative" +
                 " from postimage a" +
                 " where a.postId = ?";
-        return this.jdbcTemplate.query(getPostURLsQuery, (rs, rowNum) -> new GetPostURLsRes(
+        return this.jdbcTemplate.query(getPostUrlsQuery, (rs, rowNum) -> new GetPostUrlsRes(
                 rs.getInt("postImageId"),
                 rs.getString("URL"),
                 rs.getBoolean("representative")),

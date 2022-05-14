@@ -2,6 +2,7 @@ package com.example.demo.src.villagelifeposts;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.villagelifeposts.model.*;
 
 import java.util.List;
@@ -42,10 +43,11 @@ public class VillageLifePostController {
      * @return BaseResponse<GetVillageLifePostRes>
      */
     @GetMapping("/{village}/{postId}")
-    public BaseResponse<GetPostAndComments> getVillageLifePost(@PathVariable("village") String village,
+    public BaseResponse<GetVillageLifePostRes> getVillageLifePost(@PathVariable("village") String village,
                                                                   @PathVariable("postId") int postId) {
         try {
-            GetPostAndComments villageLifePost = villageLifePostProvider.getVillageLifePost(village, postId);
+            if(postId<=0) { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
+            GetVillageLifePostRes villageLifePost = villageLifePostProvider.getVillageLifePost(village, postId);
             return new BaseResponse<>(villageLifePost);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());

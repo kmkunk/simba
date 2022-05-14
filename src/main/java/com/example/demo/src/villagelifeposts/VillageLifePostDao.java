@@ -1,5 +1,6 @@
 package com.example.demo.src.villagelifeposts;
 
+import com.example.demo.src.posts.model.GetPostUrlsRes;
 import com.example.demo.src.villagelifeposts.model.*;
 
 import javax.sql.DataSource;
@@ -76,7 +77,7 @@ public class VillageLifePostDao {
                 new Object[]{getVillageLifePostsByVillage});
     }
 
-    public GetVillageLifePostRes getVillageLifePost(String village, int postId) {
+    public GetVillageLifePostInfoRes getVillageLifePost(String village, int postId) {
         String getVillageLifePostQuery =
                 "select a.villageLifePostId, a.content, a.createdAt, b.nickname, d.vname," +
                 " e.cname, f.villageLifePostLikeCount, g.commentCount" +
@@ -123,7 +124,7 @@ public class VillageLifePostDao {
                 " where d.vname = ? and a.villageLifePostId = ?";
         String getVillageLifePostByVillage = village;
         int getVillageLifePostByPostId = postId;
-        return this.jdbcTemplate.queryForObject(getVillageLifePostQuery, (rs, rowNum) -> new GetVillageLifePostRes(
+        return this.jdbcTemplate.queryForObject(getVillageLifePostQuery, (rs, rowNum) -> new GetVillageLifePostInfoRes(
                 rs.getInt("villageLifePostId"),
                 rs.getString("content"),
                 rs.getString("createdAt"),
@@ -170,8 +171,8 @@ public class VillageLifePostDao {
         return patchVillageLifePostRes;
     }
 
-    public List<GetCommentTemp> getVillageLifePostComments(int villageLifePostId) {
-        String getVillageLifePostComments =
+    public List<GetCommentsRes> getComments(int villageLifePostId) {
+        String getComments =
                 "select a.commentId, a.villageLifePostId, b.nickname, a.content, a.createdAt" +
                 " from comment a" +
                 "" +
@@ -182,13 +183,24 @@ public class VillageLifePostDao {
                 " on a.userId = b.userId" +
                 "" +
                 " where a.villageLifePostId = ?";
-        int getVillageLifePostCommentsById = villageLifePostId;
-        return this.jdbcTemplate.query(getVillageLifePostComments, (rs, rowNum) -> new GetCommentTemp(
+        return this.jdbcTemplate.query(getComments, (rs, rowNum) -> new GetCommentsRes(
                 rs.getInt("commentId"),
                 rs.getInt("villageLifePostId"),
                 rs.getString("nickname"),
                 rs.getString("content"),
                 rs.getString("createdAt")),
-                new Object[]{getVillageLifePostCommentsById});
+                new Object[]{villageLifePostId});
+    }
+
+    public List<GetVillageLifePostUrlsRes> getVillageLifePostUrls(int postId) {
+        String getVillageLifePostURLsQuery =
+                "select villageLifePostImageId, URL, representative" +
+                        " from villagelifepostimage" +
+                        " where villageLifePostImageId = ?";
+        return this.jdbcTemplate.query(getVillageLifePostURLsQuery, (rs, rowNum) -> new GetVillageLifePostUrlsRes(
+                        rs.getInt("villageLifePostImageId"),
+                        rs.getString("URL"),
+                        rs.getBoolean("representative")),
+                new Object[]{postId});
     }
 }
