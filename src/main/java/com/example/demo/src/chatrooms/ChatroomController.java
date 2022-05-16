@@ -7,6 +7,7 @@ import com.example.demo.src.chatrooms.model.GetChatroomsRes;
 
 import java.util.List;
 
+import com.example.demo.src.chatrooms.model.GetChatsRes;
 import com.example.demo.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 
@@ -40,4 +41,11 @@ public class ChatroomController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    /**
+     * 채팅방 조회 API
+     * [GET] /chatrooms/:userId/:chatroomId
+     * @return BaseResponse<List<GetChatsRes>>
+     */
+
 }

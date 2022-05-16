@@ -28,6 +28,18 @@ public class VillageLifePostProvider {
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
+    public List<GetVillageLifePostsRes> getVillageLifePostsByUserId(int userId) throws BaseException {
+        try {
+
+            List<GetVillageLifePostsRes> getVillageLifePostsResList =
+                    villageLifePostDao.getVillageLifePostsByUserId(userId);
+            return getVillageLifePostsResList;
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
     public GetVillageLifePostRes getVillageLifePost(String village, int postId) throws BaseException {
         try {
             GetVillageLifePostInfoRes getVillageLifePostInfoRes =
@@ -39,6 +51,17 @@ public class VillageLifePostProvider {
                     new GetVillageLifePostRes(getVillageLifePostInfoRes, getCommentsResList,
                             getVillageLifePostUrlsResList);
             return getVillageLifePostRes;
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
+    public List<GetVillageLifePostLikesRes> getVillageLifePostLikes(String village, int postId) throws BaseException {
+        try {
+            List<GetVillageLifePostLikesRes> getVillageLifePostLikesResList =
+                    villageLifePostDao.getVillageLifePostLikes(village, postId);
+            return getVillageLifePostLikesResList;
         } catch (Exception exception) {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }

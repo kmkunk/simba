@@ -36,4 +36,13 @@ public class VillageLifePostService {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+
+    public Integer deleteVillageLifePost(String village, int postId) throws BaseException {
+        try {
+            Integer deleteVillageLifePostRes = villageLifePostDao.deleteVillageLifePost(village, postId);
+            return deleteVillageLifePostRes;
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
 }

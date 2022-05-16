@@ -146,4 +146,60 @@ public class PostDao {
         int patchPostRes = postId;
         return patchPostRes;
     }
+
+    public Integer deletePost(String village, int postId) {
+        String deletePostQuery =
+                "update post" +
+                " set status = 'delete'" +
+                " where village1Id =" +
+                " (select village1Id from village1 where name = ?)" +
+                " and postid = ?";
+        this.jdbcTemplate.update(deletePostQuery, new Object[]{village, postId});
+        return postId;
+    }
+
+    public List<GetPostsRes> getPostsByCategoryId(String village, int postcategoryId) {
+        String getPostsByCategoryIdQuery =
+                "select a.postId, a.title, a.createdAt, a.price, b.name, c.chatroomCount, d.interestPostCount, e.URL" +
+                        " from post a" +
+
+                        " join (" +
+                        " select village1id, name" +
+                        " from village1" +
+                        " ) as b" +
+                        " on a.village1id = b.village1id" +
+
+                        " join (" +
+                        " select postId, count(postId) as 'chatroomCount'" +
+                        " from chatroom" +
+                        " group by postId" +
+                        " ) as c" +
+                        " on a.postId = c.postId" +
+
+                        " join (" +
+                        " select postId, count(postId) as 'interestPostCount'" +
+                        " from chatroom" +
+                        " group by postId" +
+                        " ) as d" +
+                        " on a.postId = d.postId" +
+
+                        " join (" +
+                        " select postId, URL, representative" +
+                        " from postimage" +
+                        " where representative = true " +
+                        " ) as e" +
+                        " on a.postId = e.postId" +
+
+                        " where b.name = ? and a.postcategoryId = ?";
+        return this.jdbcTemplate.query(getPostsByCategoryIdQuery, (rs, rowNum) -> new GetPostsRes(
+                        rs.getInt("postId"),
+                        rs.getString("title"),
+                        rs.getInt("price"),
+                        rs.getString("createdAt"),
+                        rs.getString("name"),
+                        rs.getInt("chatroomCount"),
+                        rs.getInt("interestPostCount"),
+                        rs.getString("URL")),
+                new Object[]{village, postcategoryId});
+    }
 }

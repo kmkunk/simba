@@ -7,6 +7,8 @@ import com.example.demo.src.users.model.*;
 
 import java.util.List;
 
+import com.example.demo.src.villagelifeposts.VillageLifePostProvider;
+import com.example.demo.src.villagelifeposts.model.GetVillageLifePostsRes;
 import com.example.demo.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +21,7 @@ public class UserController {
     private final UserProvider userProvider;
     private final UserService userService;
     private final JwtService jwtService;
+    private final VillageLifePostProvider villageLifePostProvider;
 
     /**
      * 나의 당근 조회 API
@@ -67,7 +70,7 @@ public class UserController {
     public BaseResponse<List<GetSalesRes>> getSales(@PathVariable("userId") int userId, @RequestParam String status) {
         try {
             if(userId<=0) { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
-            if(!status.equals("posting")&&!status.equals("completed")) {
+            if(!status.equals("active")&&!status.equals("complete")) {
                 return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR);
             }
 
@@ -174,6 +177,157 @@ public class UserController {
         try {
             PostLoginRes postLoginRes = userService.postLogin(postLoginReq);
             return new BaseResponse<>(postLoginRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 나의 프로필 수정 API
+     * [PATCH] /users/:userId
+     * @return BaseResponse<Integer>
+     */
+    @PatchMapping("/{userId}")
+    public BaseResponse<Integer> patchUser(@PathVariable("userId") int userId,
+                                           @RequestBody PatchUserReq patchUserReq) {
+        try {
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
+
+            Integer patchUserRes = userService.patchUser(userId, patchUserReq);
+            return new BaseResponse<>(patchUserRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 나의 거래 후기 숨기기 API
+     * [DELETE] /users/:userId/reviews/:postId
+     * @return BaseResponse<Integer>
+     */
+    @DeleteMapping("/{userId}/reviews/{postId}")
+    public BaseResponse<Integer> deleteReview(@PathVariable("userId") int userId, @PathVariable("postId") int postId) {
+        try {
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
+
+            Integer deleteReviewRes = userService.deleteReview(userId, postId);
+            return new BaseResponse<>(deleteReviewRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 나의 동네 생활 게시글 조회 API
+     * [GET] /users/:userId/villagelifeposts
+     * @return BaseResponse<List<GetVillageLifePostsRes>>
+     */
+    @GetMapping("/{userId}/villagelifeposts")
+    public BaseResponse<List<GetVillageLifePostsRes>> getVillageLifePostsByUserId(@PathVariable("userId") int userId) {
+        try {
+            List<GetVillageLifePostsRes> getVillageLifePostsResList =
+                    villageLifePostProvider.getVillageLifePostsByUserId(userId);
+            return new BaseResponse<>(getVillageLifePostsResList);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 나의 관심 카테고리 등록 API
+     * [POST] /users/:userId/interestcategorys/:interestcategoryId
+     * @return BaseResponse<Integer>
+     */
+    @PostMapping("/{userId}/interestcategorys/{interestcategoryId}")
+    public BaseResponse<Integer> postInterestCategory(@PathVariable("userId") int userId,
+                                          @PathVariable("interestcategoryId") int interestcategoryId) {
+        try {
+            if(userId<=0 || interestcategoryId<=0) { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
+
+            Integer postInterestCategoryRes = userService.postInterestCategory(userId, interestcategoryId);
+            return new BaseResponse<>(postInterestCategoryRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 나의 관심 카테고리 삭제 API
+     * [DELETE] /users/:userId/interestcategorys/:interestcategoryId
+     * @return BaseResponse<Integer>
+     */
+    @DeleteMapping("/{userId}/interestcategorys/{interestcategoryId}")
+    public BaseResponse<Integer> deleteInterestCategory(@PathVariable("userId") int userId,
+                                                      @PathVariable("interestcategoryId") int interestcategoryId) {
+        try {
+            if(userId<=0 || interestcategoryId<=0) { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
+
+            Integer deleteInterestCategoryRes = userService.deleteInterestCategory(userId, interestcategoryId);
+            return new BaseResponse<>(deleteInterestCategoryRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 나의 관심 카테고리 조회 API
+     * [GET] /users/:userId/interestcategorys
+     * @return BaseResponse<List<GetInterestCategory>>
+     */
+    @GetMapping("/{userId}/interestcategorys")
+    public BaseResponse<List<GetInterestCategoryRes>> getInterestCategoryList(@PathVariable("userId") int userId) {
+        try {
+            if(userId<=0) { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
+
+            List<GetInterestCategoryRes> interestCategoryListRes = userProvider.getInterestCategoryList(userId);
+            return new BaseResponse<>(interestCategoryListRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 나의 키워드 알림 등록 API
+     * [POST] /users/:userId/keywords
+     * @return BaseResponse<Integer>
+     */
+    @PostMapping("/{userId}/keywords")
+    public BaseResponse<Integer> postKeyword(@PathVariable("userId") int userId,
+                                             @RequestBody PostKeywordReq postKeywordReq) {
+        try {
+            if(userId<=0) { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
+
+            Integer postKeywordRes = userService.postKeyword(userId, postKeywordReq);
+            return new BaseResponse<>(postKeywordRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 나의 키워드 알림 조회 API
+     * [POST] /users/:userId/keywords
+     * @return BaseResponse<List<GetKeywordsRes>>
+     */
+    @GetMapping("/{userId}/keywords")
+    public BaseResponse<List<GetKeywordsRes>> getKeyword(@PathVariable("userId") int userId) {
+        try {
+            if(userId<=0) { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
+
+            List<GetKeywordsRes> getKeywordsResList = userProvider.getKeywords(userId);
+            return new BaseResponse<>(getKeywordsResList);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }

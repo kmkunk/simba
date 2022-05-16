@@ -2,6 +2,7 @@ package com.example.demo.src.posts;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponseStatus;
+import com.example.demo.src.posts.model.DeletePostReq;
 import com.example.demo.src.posts.model.PatchPostReq;
 import com.example.demo.src.posts.model.PostPostReq;
 import com.example.demo.src.posts.model.PostPostRes;
@@ -32,6 +33,16 @@ public class PostService {
         try {
             Integer patchPostRes = postDao.patchPost(village, postId, patchPostReq);
             return patchPostRes;
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
+    public Integer deletePost(String village, int postId) throws BaseException {
+        try {
+            Integer deletePostRes = postDao.deletePost(village, postId);
+            return deletePostRes;
         } catch (Exception exception) {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }

@@ -224,4 +224,83 @@ public class UserDao {
                 rs.getString("phone")),
                 new Object[]{userId});
     }
+
+    public Integer patchUser(int userId, PatchUserReq patchUserReq) {
+        String patchUserQuery =
+                "update user" +
+                " set nickname = ?, URL = ?" +
+                " where userId = ?";
+        this.jdbcTemplate.update(patchUserQuery,
+                new Object[]{patchUserReq.getNickname(), patchUserReq.getURL(), userId});
+        int patchPostRes = userId;
+        return patchPostRes;
+    }
+
+    public Integer deleteReview(int userId, int postId) {
+        String deleteReviewQuery =
+                "update review" +
+                " set status = 'hide'" +
+                " where sellerId = ? and postId = ?";
+        this.jdbcTemplate.update(deleteReviewQuery, new Object[]{userId, postId});
+        int patchPostRes = userId;
+        return patchPostRes;
+    }
+
+    public Integer postInterestCategory(int userId, int interestcategoryId) {
+        String postInterestCategoryQuery =
+                "insert into interestpostcategory (userId, postcategoryid)" +
+                " values" +
+                " (?, ?)";
+        this.jdbcTemplate.update(postInterestCategoryQuery, new Object[]{userId, interestcategoryId});
+        int postInterestCategoryRes = userId;
+        return postInterestCategoryRes;
+    }
+
+    public Integer deleteInterestCategory(int userId, int interestcategoryId) {
+        String deleteInterestCategoryQuery =
+                "delete from interestpostcategory" +
+                " where userId = ? and postCategoryId = ?";
+        this.jdbcTemplate.update(deleteInterestCategoryQuery, new Object[]{userId, interestcategoryId});
+        int deleteInterestCategoryRes = userId;
+        return deleteInterestCategoryRes;
+    }
+
+    public List<GetInterestCategoryRes> getInterestCategoryList(int userId) {
+        String getInterestCategoryListQuery =
+                "select a.postCategoryId, b.name" +
+                " from interestpostcategory a" +
+
+                " join (" +
+                " select postCategoryId, name" +
+                " from postcategory" +
+                " ) as b" +
+                " on a.postCategoryId = b.postCategoryId" +
+
+                " where userId = ?";
+        return this.jdbcTemplate.query(getInterestCategoryListQuery, (rs, rowNum) -> new GetInterestCategoryRes(
+                rs.getInt("postCategoryId"),
+                rs.getString("name")),
+                new Object[]{userId});
+    }
+
+    public Integer postKeyword(int userId, PostKeywordReq postKeywordReq) {
+        String postKeywordQuery =
+                "insert into keyword (userId, name)" +
+                " values" +
+                " (?, ?)";
+        this.jdbcTemplate.update(postKeywordQuery, new Object[]{userId, postKeywordReq.getName()});
+        int postInterestCategoryRes = userId;
+        return postInterestCategoryRes;
+    }
+
+    public List<GetKeywordsRes> getKeywords(int userId) {
+        String getKeywordsQuery =
+                "select keywordId, name" +
+                " from keyword" +
+                " where userId = ?";
+        return this.jdbcTemplate.query(getKeywordsQuery, (rs, rowNum) -> new GetKeywordsRes(
+                rs.getInt("keywordId"),
+                rs.getString("name")),
+                new Object[]{userId});
+    }
 }

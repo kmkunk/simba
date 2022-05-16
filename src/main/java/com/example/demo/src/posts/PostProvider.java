@@ -41,4 +41,14 @@ public class PostProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
+    public List<GetPostsRes> getPostsByCategoryId(String village, int postcategoryId) throws BaseException {
+        try {
+            List<GetPostsRes> getPostsByCategoryIdRes = postDao.getPostsByCategoryId(village, postcategoryId);
+            return getPostsByCategoryIdRes;
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
 }

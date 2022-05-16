@@ -2,6 +2,7 @@ package com.example.demo.src.users;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponseStatus;
+import com.example.demo.src.posts.model.PatchPostReq;
 import com.example.demo.src.users.model.*;
 import com.example.demo.utils.JwtService;
 import com.example.demo.utils.SHA256;
@@ -44,6 +45,56 @@ public class UserService {
             return new PostLoginRes(userId, jwt);
         } else {
             throw new BaseException(BaseResponseStatus.FAILED_TO_LOGIN);
+        }
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
+    public Integer patchUser(int userId, PatchUserReq patchUserReq) throws BaseException {
+        try {
+            Integer patchUserRes = userDao.patchUser(userId, patchUserReq);
+            return patchUserRes;
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
+    public Integer deleteReview(int userId, int postId) throws BaseException {
+        try {
+            Integer deleteReviewRes = userDao.deleteReview(userId, postId);
+            return deleteReviewRes;
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
+    public Integer postInterestCategory(int userId, int interestcategoryId) throws BaseException {
+        try {
+            Integer postInterestCategoryRes = userDao.postInterestCategory(userId, interestcategoryId);
+            return postInterestCategoryRes;
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
+    public Integer deleteInterestCategory(int userId, int interestcategoryId) throws BaseException {
+        try {
+            Integer deleteInterestCategoryRes = userDao.deleteInterestCategory(userId, interestcategoryId);
+            return deleteInterestCategoryRes;
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
+    public Integer postKeyword(int userId, PostKeywordReq postKeywordReq) throws BaseException {
+        try {
+            Integer postKeywordRes = userDao.postKeyword(userId, postKeywordReq);
+            return postKeywordRes;
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
 }

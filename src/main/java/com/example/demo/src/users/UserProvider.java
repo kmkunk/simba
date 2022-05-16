@@ -86,4 +86,24 @@ public class UserProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
+    public List<GetInterestCategoryRes> getInterestCategoryList(int userId) throws BaseException {
+        try {
+            List<GetInterestCategoryRes> getInterestCategoryResList = userDao.getInterestCategoryList(userId);
+            return getInterestCategoryResList;
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
+    public List<GetKeywordsRes> getKeywords(int userId) throws BaseException {
+        try {
+            List<GetKeywordsRes> getKeywordsResList = userDao.getKeywords(userId);
+            return getKeywordsResList;
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
 }

@@ -101,4 +101,42 @@ public class PostController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    /**
+     * 중고거래 게시글 삭제 API
+     * [DELETE] /posts/:village/:postId
+     * @return BaseResponse<Integer>
+     */
+    @DeleteMapping("/{village}/{postId}")
+    public BaseResponse<Integer> deletePost(@PathVariable("village") String village,
+                                            @PathVariable("postId") int postId,
+                                            @RequestBody DeletePostReq deletePostReq) {
+        int userId = deletePostReq.getUserId();
+
+        try {
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
+
+            Integer deletePostRes = postService.deletePost(village, postId);
+            return new BaseResponse<>(deletePostRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 카테고리 별 게시글 리스트 API
+     * [GET] /posts/:village/:postcategoryId
+     * @return BaseResponse<List<GetPostsRes>>
+     */
+    @GetMapping("/{village}/category/{postcategoryId}")
+    public BaseResponse<List<GetPostsRes>> getPostsByCategoryId(@PathVariable("village") String village,
+                                                                @PathVariable("postcategoryId") int postcategoryId) {
+        try {
+            List<GetPostsRes> getPostsByCategoryIdResList = postProvider.getPostsByCategoryId(village, postcategoryId);
+            return new BaseResponse<>(getPostsByCategoryIdResList);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 }

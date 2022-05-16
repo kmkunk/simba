@@ -25,8 +25,6 @@ public class VillageLifePostController {
      * [GET] /villagelifeposts/:village
      * @return BaseResponse<List<GetVillageLifePostsRes>>
      */
-
-    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
     @GetMapping("/{village}")
     public BaseResponse<List<GetVillageLifePostsRes>> getVillageLifePosts(@PathVariable("village") String village) {
         try {
@@ -84,6 +82,41 @@ public class VillageLifePostController {
             Integer patchVillageLifePostRes =
                     villageLifePostService.patchVillageLifePost(village, postId, patchVillageLifePostReq);
             return new BaseResponse<>(patchVillageLifePostRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 동네 생활 게시글 삭제 API
+     * [DELETE] /villagelifeposts/:village/:postId
+     * @return BaseResponse<Integer>
+     */
+    @DeleteMapping("/{village}/{postId}")
+    public BaseResponse<Integer> deleteVillageLifePost(@PathVariable("village") String village,
+                                                      @PathVariable("postId") int postId,
+                                                      @RequestBody DeleteVillageLifePostReq deleteVillageLifePostReq) {
+        try {
+            Integer deleteVillageLifePostRes= villageLifePostService.deleteVillageLifePost(village, postId);
+            return new BaseResponse<>(deleteVillageLifePostRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 동네 생활 게시글 공감 조회 API
+     * [GET] /villagelifeposts/:village/:postId/likes
+     * @return BaseResponse<List<GetVillageLifePostLikeRes>>
+     */
+    @GetMapping("/{village}/{postId}/likes")
+    public BaseResponse<List<GetVillageLifePostLikesRes>> getVillageLifePostLikes(@PathVariable("village") String village,
+                                                                  @PathVariable("postId") int postId) {
+        try {
+            if(postId<=0) { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
+            List<GetVillageLifePostLikesRes> getVillageLifePostLikesResList =
+                    villageLifePostProvider.getVillageLifePostLikes(village, postId);
+            return new BaseResponse<>(getVillageLifePostLikesResList);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }

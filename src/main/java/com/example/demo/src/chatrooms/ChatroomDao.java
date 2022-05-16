@@ -5,6 +5,7 @@ import com.example.demo.src.chatrooms.model.GetChatroomsRes;
 import javax.sql.DataSource;
 import java.util.List;
 
+import com.example.demo.src.chatrooms.model.GetChatsRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

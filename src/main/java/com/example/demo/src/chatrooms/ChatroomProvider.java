@@ -6,6 +6,7 @@ import com.example.demo.src.chatrooms.model.GetChatroomsRes;
 
 import java.util.List;
 
+import com.example.demo.src.chatrooms.model.GetChatsRes;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -26,4 +27,6 @@ public class ChatroomProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+
+
 }

@@ -77,6 +77,65 @@ public class VillageLifePostDao {
                 new Object[]{getVillageLifePostsByVillage});
     }
 
+    public List<GetVillageLifePostsRes> getVillageLifePostsByUserId(int userId) {
+        String getVillageLifePostsByUserIdQuery =
+                "select distinct(a.villageLifePostId), a.title, a.createdAt, b.cname, c.vname," +
+                        " d.nickname, e.commentCount, f.villageLifePostLikeCount, g.URL" +
+                        " from villagelifepost a" +
+
+                        " join (" +
+                        " select villageLifePostCategoryId, name as 'cname'" +
+                        " from villagelifepostcategory" +
+                        " ) as b" +
+                        " on a.villageLifePostCategoryId = b.villageLifePostCategoryId" +
+
+                        " join (" +
+                        " select village1Id, name as 'vname'" +
+                        " from village1" +
+                        " ) as c" +
+                        " on a.village1id = c.village1Id" +
+
+                        " join (" +
+                        " select userId, nickname" +
+                        " from user" +
+                        " ) as d" +
+                        " on a.userId = d.userId" +
+
+                        " left join (" +
+                        " select commentId, villageLifePostId, count(commentId) as 'commentCount'" +
+                        " from comment" +
+                        " group by commentId" +
+                        " ) as e" +
+                        " on a.villageLifePostId = e.villageLifePostId" +
+
+                        " left join (" +
+                        " select villageLifePostId, count(villageLifePostId) as 'villageLifePostLikeCount'" +
+                        " from villagelifepostlike" +
+                        " group by villageLifePostId" +
+                        " ) as f" +
+                        " on a.villageLifePostId = f.villageLifePostId" +
+
+                        " left join (" +
+                        " select villageLifePostImageId, villageLifePostId, URL, representative" +
+                        " from villagelifepostimage" +
+                        " where representative = true" +
+                        " ) as g" +
+                        " on a.villageLifePostId = g.villageLifePostId" +
+
+                        " where a.userId = ?";
+        return this.jdbcTemplate.query(getVillageLifePostsByUserIdQuery, (rs, rowNum) -> new GetVillageLifePostsRes(
+                        rs.getInt("villageLifePostId"),
+                        rs.getString("title"),
+                        rs.getString("createdAt"),
+                        rs.getString("cname"),
+                        rs.getString("vname"),
+                        rs.getString("nickname"),
+                        rs.getInt("commentCount"),
+                        rs.getInt("villageLifePostLikeCount"),
+                        rs.getString("URL")),
+                new Object[]{userId});
+    }
+
     public GetVillageLifePostInfoRes getVillageLifePost(String village, int postId) {
         String getVillageLifePostQuery =
                 "select a.villageLifePostId, a.content, a.createdAt, b.nickname, d.vname," +
@@ -202,5 +261,47 @@ public class VillageLifePostDao {
                         rs.getString("URL"),
                         rs.getBoolean("representative")),
                 new Object[]{postId});
+    }
+
+    public Integer deleteVillageLifePost(String village, int postId) {
+        String deleteVillageLifePostQuery =
+                "update villagelifepost" +
+                        " set status = 'delete'" +
+                        " where village1Id =" +
+                        " (select village1Id from village1 where name = ?)" +
+                        " and villagelifepostid = ?";
+        this.jdbcTemplate.update(deleteVillageLifePostQuery, new Object[]{village, postId});
+        return postId;
+    }
+
+    public List<GetVillageLifePostLikesRes> getVillageLifePostLikes(String village, int postId) {
+        String getVillageLifePostLikesQuery =
+                "select a.userId, b.nickname, d.vname" +
+                " from villagelifepostlike a" +
+
+                " join (" +
+                " select userId, nickname" +
+                " from user" +
+                " ) as b" +
+                " on a.userId = b.userId" +
+
+                " join (" +
+                " select userId, village1Id" +
+                " from uservillage" +
+                " ) as c" +
+                " on a.userId = c.userId" +
+
+                " join (" +
+                " select village1id, name as 'vname'" +
+                " from village1" +
+                " ) as d" +
+                " on c.village1Id = d.village1id" +
+
+                " where d.vname = ? and a.villageLifePostId = ?";
+        return this.jdbcTemplate.query(getVillageLifePostLikesQuery, (rs, rowNum) -> new GetVillageLifePostLikesRes(
+                rs.getInt("userId"),
+                rs.getString("nickname"),
+                rs.getString("vname")),
+                new Object[]{village, postId});
     }
 }
