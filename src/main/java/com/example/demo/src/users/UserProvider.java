@@ -106,4 +106,14 @@ public class UserProvider {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
+    public List<GetCommentsRes> getCommentsList(int userId) throws BaseException {
+        try {
+            List<GetCommentsRes> getCommentsResList = userDao.getComments(userId);
+            return getCommentsResList;
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
 }

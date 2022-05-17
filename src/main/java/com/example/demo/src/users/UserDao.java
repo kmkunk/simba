@@ -303,4 +303,27 @@ public class UserDao {
                 rs.getString("name")),
                 new Object[]{userId});
     }
+
+    public Integer deleteKeyword(int userId, int keywordId) {
+        String deleteKeywordQuery =
+                "update keyword" +
+                " set status = 'delete'" +
+                " where userId = ? and keywordId = ?";
+        this.jdbcTemplate.update(deleteKeywordQuery, new Object[]{userId, keywordId});
+        int postInterestCategoryRes = userId;
+        return postInterestCategoryRes;
+    }
+
+    public List<GetCommentsRes> getComments(int userId) {
+        String getCommentsQuery =
+                "select commentId, villageLifePostId, content, createdAt" +
+                " from comment" +
+                " where userId = ?";
+        return this.jdbcTemplate.query(getCommentsQuery, (rs, rowNum) -> new GetCommentsRes(
+                rs.getInt("commentId"),
+                rs.getInt("villageLifePostId"),
+                rs.getString("content"),
+                rs.getString("createdAt")),
+                new Object[]{userId});
+    }
 }

@@ -11,16 +11,14 @@ import com.example.demo.src.chatrooms.model.GetChatsRes;
 import com.example.demo.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/chatrooms")
 public class ChatroomController {
     private final ChatroomProvider chatroomProvider;
+    private final ChatroomService chatroomService;
     private final JwtService jwtService;
 
     /**
@@ -47,5 +45,38 @@ public class ChatroomController {
      * [GET] /chatrooms/:userId/:chatroomId
      * @return BaseResponse<List<GetChatsRes>>
      */
+    @GetMapping("/{userId}/{chatroomId}")
+    public BaseResponse<List<GetChatsRes>> getChats(@PathVariable("userId") int userId,
+                                                    @PathVariable("chatroomId") int chatroomId) {
+        try {
+            if(userId<=0 || chatroomId<=0) { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
 
+            List<GetChatsRes> getChatsRes = chatroomProvider.getChats(chatroomId);
+            return new BaseResponse<>(getChatsRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 채팅방 나가기 API
+     * [DELETE] /chatrooms/:userId/:chatroomId
+     * @return BaseResponse<Integer>
+     */
+    @DeleteMapping("/{userId}/{chatroomId}")
+    public BaseResponse<Integer> deleteChats(@PathVariable("userId") int userId,
+                                                    @PathVariable("chatroomId") int chatroomId) {
+        try {
+            if(userId<=0 || chatroomId<=0) { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
+
+            Integer deleteChatsRes = chatroomService.deleteChats(chatroomId);
+            return new BaseResponse<>(deleteChatsRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 }

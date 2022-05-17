@@ -28,8 +28,8 @@ com/example/demo/src/villagelifeposts/model/GetVillageLifePostsRes.java
  com.example.demo.src.villagelifeposts.model.GetVillageLifePostsRes
 com/example/demo/src/posts/model/GetPostsRes.java
  com.example.demo.src.posts.model.GetPostsRes
-com/example/demo/src/chatrooms/ChatroomService.java
- com.example.demo.src.chatrooms.ChatroomService
+com/example/demo/src/users/model/GetCommentsRes.java
+ com.example.demo.src.users.model.GetCommentsRes
 com/example/demo/src/villagelifeposts/VillageLifePostProvider.java
  com.example.demo.src.villagelifeposts.VillageLifePostProvider
 com/example/demo/src/villagelifeposts/model/PostVillageLifePostReq.java
@@ -54,8 +54,8 @@ com/example/demo/config/BaseResponse.java
  com.example.demo.config.BaseResponse
 com/example/demo/src/users/model/GetSalesRes.java
  com.example.demo.src.users.model.GetSalesRes
-com/example/demo/src/chatrooms/ChatroomDao.java
- com.example.demo.src.chatrooms.ChatroomDao
+com/example/demo/src/users/UserService.java
+ com.example.demo.src.users.UserService
 com/example/demo/src/posts/PostDao.java
  com.example.demo.src.posts.PostDao
 com/example/demo/src/users/model/GetUserRes.java
@@ -74,8 +74,8 @@ com/example/demo/src/villagelifeposts/model/PostVillageLifePostRes.java
  com.example.demo.src.villagelifeposts.model.PostVillageLifePostRes
 com/example/demo/config/BaseException.java
  com.example.demo.config.BaseException
-com/example/demo/src/chatrooms/ChatroomProvider.java
- com.example.demo.src.chatrooms.ChatroomProvider
+com/example/demo/src/users/UserController.java
+ com.example.demo.src.users.UserController
 com/example/demo/src/posts/model/PostPostReq.java
  com.example.demo.src.posts.model.PostPostReq
 com/example/demo/src/posts/model/GetPostRes.java
@@ -96,8 +96,8 @@ com/example/demo/src/posts/PostProvider.java
  com.example.demo.src.posts.PostProvider
 com/example/demo/src/villagelifeposts/VillageLifePostService.java
  com.example.demo.src.villagelifeposts.VillageLifePostService
-com/example/demo/src/chatrooms/ChatroomController.java
- com.example.demo.src.chatrooms.ChatroomController
+com/example/demo/src/users/UserDao.java
+ com.example.demo.src.users.UserDao
 com/example/demo/src/chatrooms/model/GetChatsRes.java
  com.example.demo.src.chatrooms.model.GetChatsRes
 com/example/demo/src/villagelifeposts/VillageLifePostDao.java
@@ -116,9 +116,11 @@ com/example/demo/src/users/model/GetKeywordsRes.java
  com.example.demo.src.users.model.GetKeywordsRes
 com/example/demo/src/users/UserProvider.java
  com.example.demo.src.users.UserProvider
-com/example/demo/src/users/UserController.java
- com.example.demo.src.users.UserController
-com/example/demo/src/users/UserService.java
- com.example.demo.src.users.UserService
-com/example/demo/src/users/UserDao.java
- com.example.demo.src.users.UserDao
+com/example/demo/src/chatrooms/ChatroomService.java
+ com.example.demo.src.chatrooms.ChatroomService
+com/example/demo/src/chatrooms/ChatroomController.java
+ com.example.demo.src.chatrooms.ChatroomController
+com/example/demo/src/chatrooms/ChatroomDao.java
+ com.example.demo.src.chatrooms.ChatroomDao
+com/example/demo/src/chatrooms/ChatroomProvider.java
+ com.example.demo.src.chatrooms.ChatroomProvider

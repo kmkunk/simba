@@ -28,5 +28,13 @@ public class ChatroomProvider {
         }
     }
 
-
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
+    public List<GetChatsRes> getChats(int chatroomId) throws BaseException {
+        try {
+            List<GetChatsRes> getChatsRes = chatroomDao.getChats(chatroomId);
+            return getChatsRes;
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
 }

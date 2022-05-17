@@ -58,4 +58,34 @@ public class ChatroomDao {
                 rs.getString("URL")),
                 new Object[]{getChatroomsByUserId});
     }
+
+    public List<GetChatsRes> getChats(int chatroomId) {
+        String getChatsQuery =
+                "select a.userId, b.nickname, a.content, a.createdAt" +
+                " from chat a" +
+
+                " join (" +
+                " select userId, nickname" +
+                " from user" +
+                " ) as b" +
+                " on a.userId = b.userId" +
+
+                " where a.chatroomId = ?";
+        return this.jdbcTemplate.query(getChatsQuery, (rs, rowNum) -> new GetChatsRes(
+                rs.getInt("userId"),
+                rs.getString("nickname"),
+                rs.getString("content"),
+                rs.getString("createdAt")),
+                new Object[]{chatroomId});
+    }
+
+    public Integer deleteChats(int chatroomId) {
+        String deleteChatsQuery =
+                "update chatroom" +
+                " set status = 'delete'" +
+                " where chatroomId = ?";
+        this.jdbcTemplate.update(deleteChatsQuery, new Object[]{chatroomId});
+        int deleteChatsRes = chatroomId;
+        return deleteChatsRes;
+    }
 }

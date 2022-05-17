@@ -332,4 +332,43 @@ public class UserController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    /**
+     * 나의 키워드 알림 삭제 API
+     * [DELETE] /users/:userId/keywords/:keywordId
+     * @return BaseResponse<Integer>
+     */
+    @DeleteMapping("/{userId}/keywords/{keywordId}")
+    public BaseResponse<Integer> deleteKeyword(@PathVariable("userId") int userId,
+                                             @PathVariable("keywordId") int keywordId) {
+        try {
+            if(userId<=0 || keywordId<=0) { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
+
+            Integer deleteKeywordRes = userService.deleteKeyword(userId, keywordId);
+            return new BaseResponse<>(deleteKeywordRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 나의 동네 생활 댓글 조회 API
+     * [GET] /users/:userId/comments
+     * @return BaseResponse<List<GetCommentsRes>>
+     */
+    @GetMapping("/{userId}/comments")
+    public BaseResponse<List<GetCommentsRes>> getCommentsList(@PathVariable("userId") int userId) {
+        try {
+            if(userId<=0) { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
+            int userIdByJwt = jwtService.getUserIdx();
+            if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
+
+            List<GetCommentsRes> getCommentsResList = userProvider.getCommentsList(userId);
+            return new BaseResponse<>(getCommentsResList);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 }

@@ -97,4 +97,14 @@ public class UserService {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
+    public Integer deleteKeyword(int userId, int keywordId) throws BaseException {
+        try {
+            Integer deleteKeywordRes = userDao.deleteKeyword(userId, keywordId);
+            return deleteKeywordRes;
+        } catch (Exception exception) {
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
+        }
+    }
 }
