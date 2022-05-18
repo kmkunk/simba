@@ -14,4 +14,6 @@ public class GetPostsRes {
     private int chatroomCount;
     private int interestPostCount;
     private String URL;
+    private String pullUpAt;
+    private int pullUpCount;
 }

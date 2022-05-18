@@ -246,12 +246,13 @@ public class UserDao {
         return patchPostRes;
     }
 
-    public Integer postInterestCategory(int userId, int interestcategoryId) {
+    public Integer postInterestCategory(int userId, PostInterestCategoryReq postInterestCategoryReq) {
         String postInterestCategoryQuery =
                 "insert into interestpostcategory (userId, postcategoryid)" +
                 " values" +
                 " (?, ?)";
-        this.jdbcTemplate.update(postInterestCategoryQuery, new Object[]{userId, interestcategoryId});
+        this.jdbcTemplate.update(postInterestCategoryQuery,
+                new Object[]{userId, postInterestCategoryReq.getPostCategoryId()});
         int postInterestCategoryRes = userId;
         return postInterestCategoryRes;
     }

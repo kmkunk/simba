@@ -19,9 +19,9 @@ public class PostService {
     private final PostDao postDao;
 
     @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
-    public PostPostRes postPost(String village, PostPostReq postPostReq) throws BaseException {
+    public Integer postPost(String village, PostPostReq postPostReq) throws BaseException {
         try {
-            PostPostRes postPostRes = postDao.postPost(village, postPostReq);
+            Integer postPostRes = postDao.postPost(village, postPostReq);
             return postPostRes;
         } catch (Exception exception) {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
@@ -39,9 +39,9 @@ public class PostService {
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
-    public Integer deletePost(String village, int postId) throws BaseException {
+    public Integer deletePost(String village, int postId, DeletePostReq deletePostReq) throws BaseException {
         try {
-            Integer deletePostRes = postDao.deletePost(village, postId);
+            Integer deletePostRes = postDao.deletePost(village, postId, deletePostReq);
             return deletePostRes;
         } catch (Exception exception) {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);

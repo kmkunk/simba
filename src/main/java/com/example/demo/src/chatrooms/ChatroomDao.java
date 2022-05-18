@@ -79,13 +79,13 @@ public class ChatroomDao {
                 new Object[]{chatroomId});
     }
 
-    public Integer deleteChats(int chatroomId) {
+    public Integer deleteChats(int userId, int chatroomId) {
         String deleteChatsQuery =
                 "update chatroom" +
                 " set status = 'delete'" +
                 " where chatroomId = ?";
         this.jdbcTemplate.update(deleteChatsQuery, new Object[]{chatroomId});
-        int deleteChatsRes = chatroomId;
+        int deleteChatsRes = userId;
         return deleteChatsRes;
     }
 }

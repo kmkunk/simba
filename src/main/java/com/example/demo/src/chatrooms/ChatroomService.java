@@ -16,9 +16,9 @@ public class ChatroomService {
     private final ChatroomDao chatroomDao;
 
     @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
-    public Integer deleteChats(int chatroomId) throws BaseException {
+    public Integer deleteChats(int userId, int chatroomId) throws BaseException {
         try {
-            Integer deleteChatsRes = chatroomDao.deleteChats(chatroomId);
+            Integer deleteChatsRes = chatroomDao.deleteChats(userId, chatroomId);
             return deleteChatsRes;
         } catch (Exception exception) {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);

@@ -4,10 +4,10 @@ import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.posts.model.*;
+import com.example.demo.utils.JwtService;
 
 import java.util.List;
 
-import com.example.demo.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +57,7 @@ public class PostController {
      * @return BaseResponse<PostPostRes>
      */
     @PostMapping("/{village}")
-    public BaseResponse<PostPostRes> postPost(@PathVariable("village") String village,
+    public BaseResponse<Integer> postPost(@PathVariable("village") String village,
                                               @RequestBody PostPostReq postPostReq) {
         int userId = postPostReq.getUserId();
         int postCategoryId = postPostReq.getPostCategoryId();
@@ -73,7 +73,7 @@ public class PostController {
             int userIdByJwt = jwtService.getUserIdx();
             if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
 
-            PostPostRes postPostRes = postService.postPost(village, postPostReq);
+            Integer postPostRes = postService.postPost(village, postPostReq);
             return new BaseResponse<>(postPostRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
@@ -117,7 +117,7 @@ public class PostController {
             int userIdByJwt = jwtService.getUserIdx();
             if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
 
-            Integer deletePostRes = postService.deletePost(village, postId);
+            Integer deletePostRes = postService.deletePost(village, postId, deletePostReq);
             return new BaseResponse<>(deletePostRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());

@@ -45,7 +45,7 @@ public class ChatroomController {
      * [GET] /chatrooms/:userId/:chatroomId
      * @return BaseResponse<List<GetChatsRes>>
      */
-    @GetMapping("/{userId}/{chatroomId}")
+    @GetMapping("/{userId}/chatroom/{chatroomId}")
     public BaseResponse<List<GetChatsRes>> getChats(@PathVariable("userId") int userId,
                                                     @PathVariable("chatroomId") int chatroomId) {
         try {
@@ -65,7 +65,7 @@ public class ChatroomController {
      * [DELETE] /chatrooms/:userId/:chatroomId
      * @return BaseResponse<Integer>
      */
-    @DeleteMapping("/{userId}/{chatroomId}")
+    @DeleteMapping("/{userId}/chatroom/{chatroomId}")
     public BaseResponse<Integer> deleteChats(@PathVariable("userId") int userId,
                                                     @PathVariable("chatroomId") int chatroomId) {
         try {
@@ -73,7 +73,7 @@ public class ChatroomController {
             int userIdByJwt = jwtService.getUserIdx();
             if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
 
-            Integer deleteChatsRes = chatroomService.deleteChats(chatroomId);
+            Integer deleteChatsRes = chatroomService.deleteChats(userId, chatroomId);
             return new BaseResponse<>(deleteChatsRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());

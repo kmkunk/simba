@@ -58,10 +58,10 @@ public class VillageLifePostController {
      * @return BaseResponse<PostVillageLifePostRes>
      */
     @PostMapping("/{village}")
-    public BaseResponse<PostVillageLifePostRes> postVillageLifePost(@PathVariable("village") String village,
+    public BaseResponse<Integer> postVillageLifePost(@PathVariable("village") String village,
                                                         @RequestBody PostVillageLifePostReq postVillageLifePostReq) {
         try {
-            PostVillageLifePostRes postVillageLifePostRes =
+            Integer postVillageLifePostRes =
                     villageLifePostService.postVillageLifePost(village, postVillageLifePostReq);
             return new BaseResponse<>(postVillageLifePostRes);
         } catch (BaseException exception) {
@@ -97,7 +97,8 @@ public class VillageLifePostController {
                                                       @PathVariable("postId") int postId,
                                                       @RequestBody DeleteVillageLifePostReq deleteVillageLifePostReq) {
         try {
-            Integer deleteVillageLifePostRes= villageLifePostService.deleteVillageLifePost(village, postId);
+            Integer deleteVillageLifePostRes =
+                    villageLifePostService.deleteVillageLifePost(village, postId, deleteVillageLifePostReq);
             return new BaseResponse<>(deleteVillageLifePostRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());

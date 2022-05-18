@@ -237,18 +237,19 @@ public class UserController {
 
     /**
      * 나의 관심 카테고리 등록 API
-     * [POST] /users/:userId/interestcategorys/:interestcategoryId
+     * [POST] /users/:userId/interestcategorys
      * @return BaseResponse<Integer>
      */
-    @PostMapping("/{userId}/interestcategorys/{interestcategoryId}")
+    @PostMapping("/{userId}/interestcategorys")
     public BaseResponse<Integer> postInterestCategory(@PathVariable("userId") int userId,
-                                          @PathVariable("interestcategoryId") int interestcategoryId) {
+                                          @RequestBody PostInterestCategoryReq postInterestCategoryReq) {
         try {
-            if(userId<=0 || interestcategoryId<=0) { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
+            if(userId<=0 || postInterestCategoryReq.getPostCategoryId()<=0)
+            { return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR); }
             int userIdByJwt = jwtService.getUserIdx();
             if(userId != userIdByJwt) { return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT); }
 
-            Integer postInterestCategoryRes = userService.postInterestCategory(userId, interestcategoryId);
+            Integer postInterestCategoryRes = userService.postInterestCategory(userId, postInterestCategoryReq);
             return new BaseResponse<>(postInterestCategoryRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());

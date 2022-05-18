@@ -195,7 +195,7 @@ public class VillageLifePostDao {
                 new Object[]{getVillageLifePostByVillage, getVillageLifePostByPostId});
     }
 
-    public PostVillageLifePostRes postVillageLifePost(String village, PostVillageLifePostReq postVillageLifePostReq) {
+    public Integer postVillageLifePost(String village, PostVillageLifePostReq postVillageLifePostReq) {
         String postVillageLifePostQuery =
                 "insert into villagelifepost" +
                 " (userId, villageLifePostCategoryId, village1Id," +
@@ -207,10 +207,7 @@ public class VillageLifePostDao {
                 new Object[]{postVillageLifePostReq.getUserId(), postVillageLifePostReq.getVillageLifePostCategoryId(),
                         postVillageLifePostByVillage, postVillageLifePostReq.getTitle(),
                         postVillageLifePostReq.getContent()});
-        String resultQuery =
-                "select last_insert_id() as 'villageLifePostId'";
-        return this.jdbcTemplate.queryForObject(resultQuery, (rs, rowNum) -> new PostVillageLifePostRes(
-                rs.getInt("villageLifePostId")));
+        return postVillageLifePostReq.getUserId();
     }
 
     public Integer patchVillageLifePost(String village, int postId, PatchVillageLifePostReq patchVillageLifePostReq) {
@@ -226,7 +223,7 @@ public class VillageLifePostDao {
                 new Object[]{patchVillageLifePostReq.getVillageLifePostCategoryId(),
                         patchVillageLifePostReq.getTitle(), patchVillageLifePostReq.getContent(),
                         patchVillageLifePostByVillage, patchVillageLifePostByPostId});
-        int patchVillageLifePostRes = postId;
+        int patchVillageLifePostRes = patchVillageLifePostReq.getUserId();
         return patchVillageLifePostRes;
     }
 
@@ -263,7 +260,8 @@ public class VillageLifePostDao {
                 new Object[]{postId});
     }
 
-    public Integer deleteVillageLifePost(String village, int postId) {
+    public Integer deleteVillageLifePost(String village, int postId, DeleteVillageLifePostReq deleteVillageLifePostReq)
+    {
         String deleteVillageLifePostQuery =
                 "update villagelifepost" +
                         " set status = 'delete'" +
@@ -271,7 +269,7 @@ public class VillageLifePostDao {
                         " (select village1Id from village1 where name = ?)" +
                         " and villagelifepostid = ?";
         this.jdbcTemplate.update(deleteVillageLifePostQuery, new Object[]{village, postId});
-        return postId;
+        return deleteVillageLifePostReq.getUserId();
     }
 
     public List<GetVillageLifePostLikesRes> getVillageLifePostLikes(String village, int postId) {

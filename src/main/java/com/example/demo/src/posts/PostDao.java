@@ -18,7 +18,8 @@ public class PostDao {
 
     public List<GetPostsRes> getPosts(String village) {
         String getPostsQuery =
-                "select a.postId, a.title, a.createdAt, a.price, b.name, c.chatroomCount, d.interestPostCount, e.URL" +
+                "select a.postId, a.title, a.createdAt, a.price, b.name," +
+                " c.chatroomCount, d.interestPostCount, e.URL, a.pullUpAt, a.pullUpCount" +
                 " from post a" +
 
                 " join (" +
@@ -27,28 +28,29 @@ public class PostDao {
                 " ) as b" +
                 " on a.village1id = b.village1id" +
 
-                " join (" +
+                " left join (" +
                 " select postId, count(postId) as 'chatroomCount'" +
                 " from chatroom" +
                 " group by postId" +
                 " ) as c" +
                 " on a.postId = c.postId" +
 
-                " join (" +
+                " left join (" +
                 " select postId, count(postId) as 'interestPostCount'" +
                 " from chatroom" +
                 " group by postId" +
                 " ) as d" +
                 " on a.postId = d.postId" +
 
-                " join (" +
+                " left join (" +
                 " select postId, URL, representative" +
                 " from postimage" +
                 " where representative = true " +
                 " ) as e" +
                 " on a.postId = e.postId" +
 
-                " where b.name = ?";
+                " where b.name = ? and a.status = 'active'" +
+                " order by a.pullUpAt desc";
         return this.jdbcTemplate.query(getPostsQuery, (rs, rowNum) -> new GetPostsRes(
                 rs.getInt("postId"),
                 rs.getString("title"),
@@ -57,7 +59,9 @@ public class PostDao {
                 rs.getString("name"),
                 rs.getInt("chatroomCount"),
                 rs.getInt("interestPostCount"),
-                rs.getString("URL")),
+                rs.getString("URL"),
+                rs.getString("pullUpAt"),
+                rs.getInt("pullUpCount")),
                 new Object[]{village});
     }
 
@@ -115,7 +119,7 @@ public class PostDao {
                 new Object[]{postId});
     }
 
-    public PostPostRes postPost(String village, PostPostReq postPostReq) {
+    public Integer postPost(String village, PostPostReq postPostReq) {
         String postPostQuery =
                 "insert into post" +
                 " (userId, postCategoryId, village1Id, title, content, price, createdAt, updatedAt, status)" +
@@ -125,10 +129,8 @@ public class PostDao {
         this.jdbcTemplate.update(postPostQuery,
                 new Object[]{postPostReq.getUserId(), postPostReq.getPostCategoryId(), postPostByVillage,
                         postPostReq.getTitle(), postPostReq.getContent(), postPostReq.getPrice()});
-        String resultQuery =
-                "select last_insert_id() as 'postId'";
-        return this.jdbcTemplate.queryForObject(resultQuery, (rs, rowNum) -> new PostPostRes(
-                rs.getInt("postId")));
+        int postPostRes = postPostReq.getUserId();
+        return postPostRes;
     }
 
     public Integer patchPost(String village, int postId, PatchPostReq patchPostReq) {
@@ -143,11 +145,11 @@ public class PostDao {
         this.jdbcTemplate.update(patchPostQuery,
                 new Object[]{patchPostReq.getPostCategoryId(), patchPostReq.getTitle(), patchPostReq.getContent(),
                         patchPostReq.getPrice(), patchPostByVillage, patchPostByPostId});
-        int patchPostRes = postId;
+        int patchPostRes = patchPostReq.getUserId();
         return patchPostRes;
     }
 
-    public Integer deletePost(String village, int postId) {
+    public Integer deletePost(String village, int postId, DeletePostReq deletePostReq) {
         String deletePostQuery =
                 "update post" +
                 " set status = 'delete'" +
@@ -155,12 +157,13 @@ public class PostDao {
                 " (select village1Id from village1 where name = ?)" +
                 " and postid = ?";
         this.jdbcTemplate.update(deletePostQuery, new Object[]{village, postId});
-        return postId;
+        return deletePostReq.getUserId();
     }
 
     public List<GetPostsRes> getPostsByCategoryId(String village, int postcategoryId) {
         String getPostsByCategoryIdQuery =
-                "select a.postId, a.title, a.createdAt, a.price, b.name, c.chatroomCount, d.interestPostCount, e.URL" +
+                "select a.postId, a.title, a.createdAt, a.price, b.name," +
+                        " c.chatroomCount, d.interestPostCount, e.URL, a.pullUpAt, a.pullUpCount" +
                         " from post a" +
 
                         " join (" +
@@ -199,7 +202,9 @@ public class PostDao {
                         rs.getString("name"),
                         rs.getInt("chatroomCount"),
                         rs.getInt("interestPostCount"),
-                        rs.getString("URL")),
+                        rs.getString("URL"),
+                        rs.getString("pullUpAt"),
+                        rs.getInt("pullUpCount")),
                 new Object[]{village, postcategoryId});
     }
 }

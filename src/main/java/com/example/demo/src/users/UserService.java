@@ -69,9 +69,10 @@ public class UserService {
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE, rollbackFor = Exception.class)
-    public Integer postInterestCategory(int userId, int interestcategoryId) throws BaseException {
+    public Integer postInterestCategory(int userId, PostInterestCategoryReq postInterestCategoryReq)
+            throws BaseException {
         try {
-            Integer postInterestCategoryRes = userDao.postInterestCategory(userId, interestcategoryId);
+            Integer postInterestCategoryRes = userDao.postInterestCategory(userId, postInterestCategoryReq);
             return postInterestCategoryRes;
         } catch (Exception exception) {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
